@@ -13,23 +13,47 @@ void swap(int *p, int *q){
   *q = tmp;
 }
 
-int quick_select(int A[], int n, int k){
-  int i, j, pivot;
-
-// 真ん中の要素をピボットとする
-  pivot = A[n/2];
-  A[n/2] = A[0];
-  A[0] = pivot;
-  for(i = j = 1; i < n; i++){
-    if(A[i] <= pivot){
-      swap(A+i, A+j);
-      j++;
+// 適当に要素を入れ替えて中央値をA[0]に移動させる
+void median(int A[], int n){
+    if(n == 1) return;
+    else if(n <= 5){
+        int i, j;
+        for(i = n-1; i >= 0; i--){
+            for(j = 0; j < i; j++){
+                if(A[j] > A[j+1]) swap(A+j, A+j+1);
+            }
+        }
+        swap(A, A+(n+1)/2);
     }
-  }
+    else{
+        int s, k, m;
+        s = n / 5;
+        for(k = 0; k < 4; k++){
+            median(A+k*s, s);
+            swap(A+k, A+k*s);
+        }
+        median(A+4*s, n-4*s);
+        swap(A+4, A+4*s);
+        median(A, 5);
+    }
+}
 
-  if(j == k+1) return pivot;
-  else if(j < k+1) return quick_select(A+j, n-j, k-j);
-  else return quick_select(A+1, j-1, k);
+int quick_select(int A[], int n, int k){
+    int i, j, pivot;
+
+// 中央値をピボットとする
+    median(A, n);
+    pivot = A[0];
+    for(i = j = 1; i < n; i++){
+        if(A[i] <= pivot){
+            swap(A+i, A+j);
+            j++;
+        }
+    }
+
+    if(j == k+1) return pivot;
+    else if(j < k+1) return quick_select(A+j, n-j, k-j);
+    else return quick_select(A+1, j-1, k);
 }
 
 
