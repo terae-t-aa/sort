@@ -23,15 +23,13 @@ void quick_sort(int A[], int n){
     
 // 真ん中の要素をピボットとする
     pivot = A[n/2];
-    A[n/2] = A[0];
-    A[0] = pivot;
-    for(i1 = j1 = 1; i1 < n; i1++){
+    for(i1 = j1 = 0; i1 < n; i1++){
         if(A[i1] <= pivot){
             swap(A+i1, A+j1);
             j1++;
         }
     }
-    for(i2 = j2 = 1; i2 < j1; i2++){
+    for(i2 = j2 = 0; i2 < j1; i2++){
         if(A[i2] < pivot){
             swap(A+i2, A+j2);
             j2++;

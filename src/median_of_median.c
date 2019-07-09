@@ -13,28 +13,28 @@ void swap(int *p, int *q){
   *q = tmp;
 }
 
+// ソートによって中央値を求めてA[0]に移動させる
+void smedian(int A[], int n){
+    int i, j;
+    for(i = n-1; i > 0; i--){
+        for(j = 0; j < i; j++){
+            if(A[j] > A[j+1]) swap(A+j, A+j+1);
+        }
+    }
+    swap(A, A+n/2);
+}
+
 // 適当に要素を入れ替えて中央値をA[0]に移動させる
 void median(int A[], int n){
     if(n == 1) return;
-    else if(n <= 5){
-        int i, j;
-        for(i = n-1; i >= 0; i--){
-            for(j = 0; j < i; j++){
-                if(A[j] > A[j+1]) swap(A+j, A+j+1);
-            }
-        }
-        swap(A, A+(n+1)/2);
-    }
-    else{
-        int s, k, m;
-        s = n / 5;
-        for(k = 0; k < 4; k++){
-            median(A+k*s, s);
-            swap(A+k, A+k*s);
-        }
-        median(A+4*s, n-4*s);
-        swap(A+4, A+4*s);
-        median(A, 5);
+    else {
+        int s, i;
+        s = (n-1)/5;
+        for(i = 0; i < s; i++){smedian(A+i*5, 5);}
+        smedian(A+s*5, n-s*5);
+        for(i = 1; i <= s; i++){swap(A+i, A+i*5);}
+        
+        median(A, s+1);
     }
 }
 
